@@ -110,8 +110,18 @@ class ButtonsPanel(wx.Panel):
 
     def on_start_service(self, event):
         print("启动Service")
-        self.textctrl_hint.SetValue('')
-        self.textctrl_shell.SetValue('adb shell am start -n {}/'.format(SelectItem.get_selected_package_name()))
+        self.textctrl_hint.SetValue('''-n 包名/组件名 指定组件启动
+-a action 指定启动Action
+--es key stringValue String类型参数
+--ez key booleanValue Boolean类型参数
+--ei key intValue int整型参数
+--el key longValue long长整型参数
+--ef key floatValue float浮点数参数
+
+不带参数启动：adb shell am startservice -n 包名/组件名
+带参数启动：adb shell am startservice -n 包名/组件名 --es str_arg_key "str_arg_value"
+        ''')
+        self.textctrl_shell.SetValue('adb shell am startservice -n {}/'.format(SelectItem.get_selected_package_name()))
 
     def on_send_broadcast(self, event):
         print("发送Broadcast")
