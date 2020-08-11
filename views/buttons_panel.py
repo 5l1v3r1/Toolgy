@@ -25,8 +25,8 @@ class ButtonsPanel(wx.Panel):
         # device operation
         self.staticboxsizer_devices = wx.StaticBoxSizer(wx.StaticBox(self, label='Device Operation'))
         self.boxsizer_devices = wx.BoxSizer(wx.HORIZONTAL)
-        self.statictext_device_name = wx.StaticText(self, -1, label='Name:')
-        self.statictext_device_os_version = wx.StaticText(self, -1, label='OS Version:')
+        self.statictext_device_name = wx.StaticText(self, -1, label='Name:ç')
+        self.statictext_device_os_version = wx.StaticText(self, -1, label='OS Version:          ')
         self.boxsizer_devices.Add(self.statictext_device_name, flag=wx.CENTER | wx.ALL, border=0)
         self.boxsizer_devices.AddSpacer(10)
         self.boxsizer_devices.Add(self.statictext_device_os_version, flag=wx.CENTER | wx.ALL, border=0)
@@ -172,6 +172,15 @@ class ButtonsPanel(wx.Panel):
             device_os_version = DeviceTool.getprop_ro_build_version_release()
             self.statictext_device_name.SetLabel('Name: {}'.format(device_name[0]).strip())
             self.statictext_device_os_version.SetLabel('OS Version: {}'.format(device_os_version[0]).strip())
+            pub.sendMessage('re_select_device')
+        else:
+            SelectItem.set_selected_device_name('')
+            device_name = '          '
+            device_os_version = '          '
+            self.statictext_device_name.SetLabel('Name: {}'.format(device_name))
+            self.statictext_device_os_version.SetLabel('OS Version: {}'.format(device_os_version))
+            SelectItem.clear_all()
+            pub.sendMessage('no_device')
 
     def on_get_top_activity(self, event):
         self.clear_all_textctrl()

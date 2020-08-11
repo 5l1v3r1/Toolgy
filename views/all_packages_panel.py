@@ -46,11 +46,19 @@ class AllPackagesPanel(wx.Panel):
 
         self.SetSizer(self.boxSizer)
 
-        self.init_packages_list()
-        self.checkbox_third_part_packages.SetValue(True)
-        self.refresh_listctrl(SelectItem.get_third_part_packages_list())
+        if SelectItem.get_selected_device_name() != '':
+            self.init_packages_list()
+            self.checkbox_third_part_packages.SetValue(True)
+            self.refresh_listctrl(SelectItem.get_third_part_packages_list())
 
         pub.subscribe(self.re_select_device, 're_select_device')
+        pub.subscribe(self.no_device, 'no_device')
+
+    def no_device(self):
+        self.checkbox_all_packages.SetValue(False)
+        self.checkbox_system_packages.SetValue(False)
+        self.checkbox_third_part_packages.SetValue(False)
+        self.listCtrl.DeleteAllItems()
 
     def re_select_device(self):
         self.init_packages_list()

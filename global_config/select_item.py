@@ -11,6 +11,14 @@ class SelectItem:
     list_third_part_packages = []
 
     @staticmethod
+    def clear_all():
+        SelectItem.selected_package_name = ''
+        SelectItem.selected_device_name = ''
+        SelectItem.list_all_packages = []
+        SelectItem.list_system_packages = []
+        SelectItem.list_third_part_packages = []
+
+    @staticmethod
     def get_selected_package_name():
         return SelectItem.selected_package_name
 
