@@ -13,7 +13,7 @@ git clone https://github.com/wnagzihxa1n/Toolgy.git
 Open python IDE and import the project, my development tool is PyCharm, it's very powerful.
 
 ## How to Use
-First, your system environment needs include 'adb', most of toolgy's functions are base on `adb shell` command.
+First, your system environment needs include `adb`, most of toolgy's functions are base on `adb shell` command.
 
 Please follow the official guide to setup.
 - https://developer.android.com/studio/command-line/adb
