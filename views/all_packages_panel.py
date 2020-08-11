@@ -1,6 +1,7 @@
 # coding=utf-8
 from __future__ import print_function
 
+from pubsub import pub
 import wx
 
 from global_config.select_item import SelectItem
@@ -47,6 +48,13 @@ class AllPackagesPanel(wx.Panel):
         self.checkbox_third_part_packages.SetValue(True)
         self.refresh_listctrl(SelectItem.get_third_part_packages_list())
 
+        pub.subscribe(self.re_select_device, 're_select_device')
+
+    def re_select_device(self):
+        self.init_packages_list()
+        self.checkbox_third_part_packages.SetValue(True)
+        self.refresh_listctrl(SelectItem.get_third_part_packages_list())
+
     def on_refresh_packages_info(self, event):
         self.init_packages_list()
         self.checkbox_all_packages.SetValue(True)
@@ -69,13 +77,10 @@ class AllPackagesPanel(wx.Panel):
         temp_system_packages = []
         temp_third_part_packages = []
         for package in packages:
-            if 'package:/system/' in package or 'package:/vendor/' in package:
+            if 'package:/system/' in package or 'package:/vendor/' in package or 'package:/product/overlay' in package:
                 temp_system_packages.append(package)
             else:
                 temp_third_part_packages.append(package)
-
-        print(temp_system_packages)
-        print(temp_third_part_packages)
 
         SelectItem.set_system_packages_list(temp_system_packages)
         SelectItem.set_third_part_packages_list(temp_third_part_packages)

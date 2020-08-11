@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 import wx
+from pubsub import pub
 
 from global_config.select_item import SelectItem
 from tools.shell_tool import ShellTool
@@ -25,6 +26,7 @@ class ButtonsPanel(wx.Panel):
         self.button_refresh_devices = wx.Button(self, label="刷新设备列表")
         self.boxsizer_devices.Add(self.combobox_devices, flag=wx.EXPAND | wx.ALL, border=10)
         self.boxsizer_devices.Add(self.button_refresh_devices, flag=wx.EXPAND | wx.ALL, border=10)
+        self.Bind(wx.EVT_COMBOBOX, self.on_combobox_device_select, self.combobox_devices)
         self.Bind(wx.EVT_BUTTON, self.on_refresh_devices_list, self.button_refresh_devices)
 
         # 启动四大组件
@@ -92,6 +94,15 @@ class ButtonsPanel(wx.Panel):
         # 应用启动时刷新设备列表
         self.refresh_devices_list()
 
+    def on_combobox_device_select(self, event):
+        select_index = self.combobox_devices.GetSelection()
+        if select_index == wx.NOT_FOUND:
+            return
+        device_name = self.combobox_devices.GetItems()[select_index].encode('utf-8')
+        SelectItem.set_selected_device_name(device_name)
+
+        pub.sendMessage('re_select_device')
+
     def on_start_activity(self, event):
         print("启动Activity")
         self.textctrl_hint.SetValue('''-n 包名/组件名 指定组件启动
@@ -106,7 +117,9 @@ class ButtonsPanel(wx.Panel):
 指定Action启动：adb shell am start -n 包名/组件名 -a Action
 带参数启动：adb shell am start -n 包名/组件名 --es str_arg_key "str_arg_value"
         ''')
-        self.textctrl_shell.SetValue('adb shell am start -n {}/'.format(SelectItem.get_selected_package_name()))
+        self.textctrl_shell.SetValue('adb -s {} shell am start -n {}/'
+                                     .format(SelectItem.get_selected_device_name(),
+                                             SelectItem.get_selected_package_name()))
 
     def on_start_service(self, event):
         print("启动Service")
@@ -121,12 +134,14 @@ class ButtonsPanel(wx.Panel):
 不带参数启动：adb shell am startservice -n 包名/组件名
 带参数启动：adb shell am startservice -n 包名/组件名 --es str_arg_key "str_arg_value"
         ''')
-        self.textctrl_shell.SetValue('adb shell am startservice -n {}/'.format(SelectItem.get_selected_package_name()))
+        self.textctrl_shell.SetValue('adb -s {} shell am startservice -n {}/'
+                                     .format(SelectItem.get_selected_device_name(),
+                                             SelectItem.get_selected_package_name()))
 
     def on_send_broadcast(self, event):
         print("发送Broadcast")
         self.textctrl_hint.SetValue('')
-        self.textctrl_shell.SetValue('adb shell am broadcast -a ')
+        self.textctrl_shell.SetValue('adb -s {} shell am broadcast -a '.format(SelectItem.get_selected_device_name()))
 
     def on_refresh_devices_list(self, event):
         print("刷新设备列表")
@@ -150,12 +165,15 @@ class ButtonsPanel(wx.Panel):
 
     def on_get_top_activity(self, event):
         self.textctrl_hint.SetValue('')
-        device_build_version = ShellTool.run("adb shell getprop ro.build.version.release")
+        device_build_version = ShellTool.run("adb -s {} shell getprop ro.build.version.release"
+                                             .format(SelectItem.get_selected_device_name()))
         shell = ''
         if device_build_version[0].startswith("7"):
-            shell = 'adb shell dumpsys activity | grep "mFocusedActivity"'
+            shell = 'adb -s {} shell dumpsys activity | grep "mFocusedActivity"'\
+                .format(SelectItem.get_selected_device_name())
         elif device_build_version[0].startswith("8"):
-            shell = 'adb shell dumpsys activity activities | grep "mResumedActivity"'
+            shell = 'adb -s {} shell dumpsys activity activities | grep "mResumedActivity"'\
+                .format(SelectItem.get_selected_device_name())
         self.textctrl_shell.SetValue(shell)
         out, err = ShellTool.run(shell)
         self.textctrl_output.SetValue(out)
@@ -164,7 +182,7 @@ class ButtonsPanel(wx.Panel):
 
     def on_get_device_info(self, event):
         self.textctrl_hint.SetValue('')
-        shell = 'adb shell getprop'
+        shell = 'adb -s {} shell getprop'.format(SelectItem.get_selected_device_name())
         self.textctrl_shell.SetValue(shell)
         out, err = ShellTool.run(shell)
         self.textctrl_output.SetValue(out)
