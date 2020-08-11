@@ -9,9 +9,9 @@ class PackageManagerTool:
         pass
 
     @staticmethod
-    def install_app(self, event):
+    def install_app():
         pass
 
     @staticmethod
-    def uninstall_app(self, event):
+    def uninstall_app(buttons_panel, package_name):
         pass
