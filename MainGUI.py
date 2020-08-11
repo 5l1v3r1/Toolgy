@@ -5,14 +5,14 @@ import wx
 from views.potat0_frame import Potat0Frame
 
 
-class AndroidDoctorApp(wx.App):
+class AndroidToolgyApp(wx.App):
     def OnInit(self):
         Potat0Frame(None, 'Android Toolgy by wnagzihxa1n').Show()
         return True
 
 
 def main():
-    app = AndroidDoctorApp()
+    app = AndroidToolgyApp()
     app.MainLoop()
 
 
