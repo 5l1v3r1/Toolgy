@@ -59,10 +59,10 @@ class AllPackagesPanel(wx.Panel):
 
     def on_refresh_packages_info(self, event):
         self.init_packages_list()
-        self.checkbox_all_packages.SetValue(True)
+        self.checkbox_all_packages.SetValue(False)
         self.checkbox_system_packages.SetValue(False)
-        self.checkbox_third_part_packages.SetValue(False)
-        self.refresh_listctrl(SelectItem.get_all_packages_list())
+        self.checkbox_third_part_packages.SetValue(True)
+        self.refresh_listctrl(SelectItem.get_third_part_packages_list())
 
     def on_list_box_item_click(self, event):
         print(event.GetIndex(), self.listCtrl_packages[event.GetIndex()])

@@ -7,11 +7,8 @@ class SelectItem:
     selected_package_name = ''
     selected_device_name = ''
     list_all_packages = []
-    list_all_packages_filepath = []
     list_system_packages = []
-    list_system_packages_filepath = []
     list_third_part_packages = []
-    list_third_part_packages_filepath = []
 
     @staticmethod
     def get_selected_package_name():
