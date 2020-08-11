@@ -1,6 +1,8 @@
 # coding=utf-8
 from __future__ import print_function
 
+import os
+
 import wx
 from pubsub import pub
 
@@ -77,14 +79,17 @@ class ButtonsPanel(wx.Panel):
         self.boxsizer_operation.Add(self.button_uninsatall_app, flag=wx.EXPAND | wx.ALL, border=0)
         self.Bind(wx.EVT_BUTTON, self.on_get_top_activity, self.button_top_activity)
         self.Bind(wx.EVT_BUTTON, self.on_get_device_info, self.button_device_info)
+        self.Bind(wx.EVT_BUTTON, self.on_install_app, self.button_insatall_app)
         self.staticboxsizer_operation.Add(self.boxsizer_operation)
 
         # frida operation
         self.staticboxsizer_frida = wx.StaticBoxSizer(wx.StaticBox(self, label='Frida'))
         self.boxsizer_frida = wx.BoxSizer(wx.HORIZONTAL)
         self.button_create_basic_script = wx.Button(self, label='Basic Script')
+        self.button_create_native_script = wx.Button(self, label='Native Script')
         self.boxsizer_frida.Add(self.button_create_basic_script, flag=wx.EXPAND | wx.ALL, border=0)
         self.boxsizer_frida.AddSpacer(10)
+        self.boxsizer_frida.Add(self.button_create_native_script, flag=wx.EXPAND | wx.ALL, border=0)
         self.staticboxsizer_frida.Add(self.boxsizer_frida)
         self.Bind(wx.EVT_BUTTON, self.on_generate_basic_frida_script, self.button_create_basic_script)
 
@@ -123,6 +128,7 @@ class ButtonsPanel(wx.Panel):
         self.refresh_devices_list()
 
     def on_combobox_device_select(self, event):
+        self.clear_all_textctrl()
         select_index = self.combobox_devices.GetSelection()
         if select_index == wx.NOT_FOUND:
             return
@@ -136,20 +142,22 @@ class ButtonsPanel(wx.Panel):
         pub.sendMessage('re_select_device')
 
     def on_start_activity(self, event):
+        self.clear_all_textctrl()
         ComponentTool.start_activity(self)
 
     def on_start_service(self, event):
+        self.clear_all_textctrl()
         ComponentTool.start_service(self)
 
     def on_send_broadcast(self, event):
+        self.clear_all_textctrl()
         ComponentTool.send_broadcast(self)
 
     def on_refresh_devices_list(self, event):
-        self.textctrl_hint.SetValue('')
         self.refresh_devices_list()
 
     def refresh_devices_list(self):
-        self.textctrl_hint.SetValue('')
+        self.clear_all_textctrl()
         out, err = ShellTool.run("adb devices")
         devices = out.split('\n')
         self.devices_list = []
@@ -166,7 +174,7 @@ class ButtonsPanel(wx.Panel):
             self.statictext_device_os_version.SetLabel('OS Version: {}'.format(device_os_version[0]).strip())
 
     def on_get_top_activity(self, event):
-        self.textctrl_hint.SetValue('')
+        self.clear_all_textctrl()
         device_build_version = DeviceTool.getprop_ro_build_version_release()
         shell = ''
         if device_build_version[0].startswith("7"):
@@ -198,7 +206,7 @@ class ButtonsPanel(wx.Panel):
         self.textctrl_output.AppendText(err)
 
     def on_generate_basic_frida_script(self, event):
-        print("on_generate_basic_frida_script")
+        self.clear_all_textctrl()
         self.textctrl_shell.SetValue('''import frida, sys
 
 package_name = ''
@@ -225,3 +233,20 @@ script.on('message', on_message)
 script.load()
 sys.stdin.read()
         ''')
+
+    def clear_all_textctrl(self):
+        self.textctrl_hint.SetValue('')
+        self.textctrl_shell.SetValue('')
+        self.textctrl_output.SetValue('')
+
+    def on_install_app(self, event):
+        dir_name = ''
+        dialog = wx.FileDialog(self, 'Choose a apk file', dir_name, "", "*.*", wx.FD_OPEN)
+        if dialog.ShowModal() == wx.ID_OK:
+            file_name = dialog.GetFilename()
+            dir_name = dialog.GetDirectory()
+            file_path = os.path.join(dir_name, file_name)
+            self.textctrl_shell.SetValue('adb install {}'.format(file_path.replace(' ', '\ ')))
+
+    def on_uninstall_app(self, event):
+        pass
