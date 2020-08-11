@@ -20,50 +20,79 @@ class ButtonsPanel(wx.Panel):
         super(ButtonsPanel, self).__init__(parent=parent, style=wx.BORDER_NONE)
         self.boxsizer_main = wx.BoxSizer(wx.VERTICAL)
 
-        # device info
-        self.boxsizer_device_info = wx.BoxSizer(wx.HORIZONTAL)
-        self.statictext_device_name = wx.StaticText(self, label='Name:')
-        self.statictext_device_os_version = wx.StaticText(self, label='OS Version:')
-        self.boxsizer_device_info.Add(self.statictext_device_name, flag=wx.EXPAND | wx.ALL, border=10)
-        self.boxsizer_device_info.Add(self.statictext_device_os_version, flag=wx.EXPAND | wx.ALL, border=10)
-
         # device operation
+        self.staticboxsizer_devices = wx.StaticBoxSizer(wx.StaticBox(self, label='Device Operation'))
         self.boxsizer_devices = wx.BoxSizer(wx.HORIZONTAL)
+        self.statictext_device_name = wx.StaticText(self, -1, label='Name:')
+        self.statictext_device_os_version = wx.StaticText(self, -1, label='OS Version:')
+        self.boxsizer_devices.Add(self.statictext_device_name, flag=wx.CENTER | wx.ALL, border=0)
+        self.boxsizer_devices.AddSpacer(10)
+        self.boxsizer_devices.Add(self.statictext_device_os_version, flag=wx.CENTER | wx.ALL, border=0)
+        self.boxsizer_devices.AddSpacer(10)
         self.devices_list = []
         self.combobox_devices = wx.ComboBox(self, choices=self.devices_list)
-        self.button_refresh_devices = wx.Button(self, label="Refresh Device List")
-        self.boxsizer_devices.Add(self.combobox_devices, flag=wx.EXPAND | wx.ALL, border=10)
-        self.boxsizer_devices.Add(self.button_refresh_devices, flag=wx.EXPAND | wx.ALL, border=10)
+        self.button_refresh_devices = wx.Button(self, label='Refresh Device List')
+        self.boxsizer_devices.Add(self.combobox_devices, flag=wx.EXPAND | wx.ALL, border=0)
+        self.boxsizer_devices.AddSpacer(10)
+        self.boxsizer_devices.Add(self.button_refresh_devices, flag=wx.EXPAND | wx.ALL, border=0)
         self.Bind(wx.EVT_COMBOBOX, self.on_combobox_device_select, self.combobox_devices)
         self.Bind(wx.EVT_BUTTON, self.on_refresh_devices_list, self.button_refresh_devices)
+        self.staticboxsizer_devices.Add(self.boxsizer_devices)
 
         # component operation
+        self.staticboxsizer_component = wx.StaticBoxSizer(wx.StaticBox(self, label='Component Operation'))
         self.boxsizer_component = wx.BoxSizer(wx.HORIZONTAL)
-        self.button_activity = wx.Button(self, label="Start Activity")
-        self.button_service = wx.Button(self, label="Start Service")
-        self.button_broadcast = wx.Button(self, label="Send Broadcast")
-        self.boxsizer_component.Add(self.button_activity, flag=wx.EXPAND | wx.ALL, border=10)
-        self.boxsizer_component.Add(self.button_service, flag=wx.EXPAND | wx.ALL, border=10)
-        self.boxsizer_component.Add(self.button_broadcast, flag=wx.EXPAND | wx.ALL, border=10)
+        self.button_activity = wx.Button(self, label='Start Activity')
+        self.button_service = wx.Button(self, label='Start Service')
+        self.button_broadcast = wx.Button(self, label='Send Broadcast')
+        self.button_intent_attack_poc = wx.Button(self, label='Intent Attack Poc')
+        self.boxsizer_component.Add(self.button_activity, flag=wx.EXPAND | wx.ALL, border=0)
+        self.boxsizer_component.AddSpacer(10)
+        self.boxsizer_component.Add(self.button_service, flag=wx.EXPAND | wx.ALL, border=0)
+        self.boxsizer_component.AddSpacer(10)
+        self.boxsizer_component.Add(self.button_broadcast, flag=wx.EXPAND | wx.ALL, border=0)
+        self.boxsizer_component.AddSpacer(10)
+        self.boxsizer_component.Add(self.button_intent_attack_poc, flag=wx.EXPAND | wx.ALL, border=0)
         self.Bind(wx.EVT_BUTTON, self.on_start_activity, self.button_activity)
         self.Bind(wx.EVT_BUTTON, self.on_start_service, self.button_service)
         self.Bind(wx.EVT_BUTTON, self.on_send_broadcast, self.button_broadcast)
+        self.staticboxsizer_component.Add(self.boxsizer_component)
 
         # general operation
+        self.staticboxsizer_operation = wx.StaticBoxSizer(wx.StaticBox(self, label='General Operation'))
         self.boxsizer_operation = wx.BoxSizer(wx.HORIZONTAL)
-        self.button_operation = wx.Button(self, label="Backup App")
-        self.button_top_activity = wx.Button(self, label="Top Activity")
-        self.button_device_info = wx.Button(self, label="Device Info")
-        self.boxsizer_operation.Add(self.button_operation, flag=wx.EXPAND | wx.ALL, border=10)
-        self.boxsizer_operation.Add(self.button_top_activity, flag=wx.EXPAND | wx.ALL, border=10)
-        self.boxsizer_operation.Add(self.button_device_info, flag=wx.EXPAND | wx.ALL, border=10)
+        self.button_operation = wx.Button(self, label='Backup App')
+        self.button_top_activity = wx.Button(self, label='Top Activity')
+        self.button_device_info = wx.Button(self, label='Device Info')
+        self.button_insatall_app = wx.Button(self, label='Install App')
+        self.button_uninsatall_app = wx.Button(self, label='Uninstall App')
+        self.boxsizer_operation.Add(self.button_operation, flag=wx.EXPAND | wx.ALL, border=0)
+        self.boxsizer_operation.AddSpacer(10)
+        self.boxsizer_operation.Add(self.button_top_activity, flag=wx.EXPAND | wx.ALL, border=0)
+        self.boxsizer_operation.AddSpacer(10)
+        self.boxsizer_operation.Add(self.button_device_info, flag=wx.EXPAND | wx.ALL, border=0)
+        self.boxsizer_operation.AddSpacer(10)
+        self.boxsizer_operation.Add(self.button_insatall_app, flag=wx.EXPAND | wx.ALL, border=0)
+        self.boxsizer_operation.AddSpacer(10)
+        self.boxsizer_operation.Add(self.button_uninsatall_app, flag=wx.EXPAND | wx.ALL, border=0)
         self.Bind(wx.EVT_BUTTON, self.on_get_top_activity, self.button_top_activity)
         self.Bind(wx.EVT_BUTTON, self.on_get_device_info, self.button_device_info)
+        self.staticboxsizer_operation.Add(self.boxsizer_operation)
 
-        self.boxsizer_main.Add(self.boxsizer_device_info)
-        self.boxsizer_main.Add(self.boxsizer_devices)
-        self.boxsizer_main.Add(self.boxsizer_component)
-        self.boxsizer_main.Add(self.boxsizer_operation)
+        # frida operation
+        self.staticboxsizer_frida = wx.StaticBoxSizer(wx.StaticBox(self, label='Frida'))
+        self.boxsizer_frida = wx.BoxSizer(wx.HORIZONTAL)
+        self.button_create_basic_script = wx.Button(self, label='Basic Script')
+        self.boxsizer_frida.Add(self.button_create_basic_script, flag=wx.EXPAND | wx.ALL, border=0)
+        self.boxsizer_frida.AddSpacer(10)
+        self.staticboxsizer_frida.Add(self.boxsizer_frida)
+        self.Bind(wx.EVT_BUTTON, self.on_generate_basic_frida_script, self.button_create_basic_script)
+
+        # Add all staticboxsizers to boxsizer_main
+        self.boxsizer_main.Add(self.staticboxsizer_devices, flag=wx.EXPAND | wx.ALL, border=0)
+        self.boxsizer_main.Add(self.staticboxsizer_component, flag=wx.EXPAND | wx.ALL, border=0)
+        self.boxsizer_main.Add(self.staticboxsizer_operation, flag=wx.EXPAND | wx.ALL, border=0)
+        self.boxsizer_main.Add(self.staticboxsizer_frida, flag=wx.EXPAND | wx.ALL, border=0)
 
         # command param hint
         self.textctrl_hint = wx.TextCtrl(self, style=wx.TE_MULTILINE | wx.TE_READONLY)
@@ -167,3 +196,32 @@ class ButtonsPanel(wx.Panel):
         self.textctrl_output.SetValue(out)
         self.textctrl_output.AppendText('\n')
         self.textctrl_output.AppendText(err)
+
+    def on_generate_basic_frida_script(self, event):
+        print("on_generate_basic_frida_script")
+        self.textctrl_shell.SetValue('''import frida, sys
+
+package_name = ''
+
+def on_message(message, data):
+    if message['type'] == 'send':
+        print("{}".format(message['payload']))
+    else:
+        print(message)
+
+    jscode = \'\'\'
+        Java.perform(function () {
+        var class_xxx = Java.use('');
+        class_xxx.function_yyy.implementation = function (param_1, param_2) {
+                var result = this.function_yyy(param_1, param_2);
+                return result;
+            };
+        });
+    \'\'\'
+
+process = frida.get_usb_device().attach(package_name)
+script = process.create_script(jscode)
+script.on('message', on_message)
+script.load()
+sys.stdin.read()
+        ''')
