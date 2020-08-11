@@ -66,7 +66,6 @@ class AllPackagesPanel(wx.Panel):
     def on_list_box_item_click(self, event):
         print(event.GetIndex(), self.listCtrl_packages[event.GetIndex()])
         SelectItem.set_selected_package_name(self.listCtrl_packages[event.GetIndex()])
-        print("选中了 ==> " + SelectItem.get_selected_package_name())
 
     def on_list_box_item_double_click(self, event):
         print(event.GetIndex(), self.listCtrl_packages[event.GetIndex()])
@@ -79,9 +78,9 @@ class AllPackagesPanel(wx.Panel):
         temp_third_part_packages = []
         for package in packages:
             if 'package:/system/' in package or 'package:/vendor/' in package or 'package:/product/overlay' in package:
-                temp_system_packages.append(package)
+                temp_system_packages.append(package.replace('==/base.apk', ''))
             else:
-                temp_third_part_packages.append(package)
+                temp_third_part_packages.append(package.replace('==/base.apk', ''))
 
         SelectItem.set_system_packages_list(temp_system_packages)
         SelectItem.set_third_part_packages_list(temp_third_part_packages)
