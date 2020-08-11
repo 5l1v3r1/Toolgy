@@ -39,7 +39,7 @@ class AllPackagesPanel(wx.Panel):
         self.listCtrl.InsertColumn(0, 'Num', wx.LIST_FORMAT_CENTER, width=50)
         self.listCtrl.InsertColumn(1, 'Package Name', wx.LIST_FORMAT_LEFT, width=300)
         self.listCtrl.InsertColumn(2, 'APK Path', wx.LIST_FORMAT_LEFT, width=500)
-        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.on_list_box_item_blick, self.listCtrl)
+        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.on_list_box_item_click, self.listCtrl)
         self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.on_list_box_item_double_click, self.listCtrl)
         self.boxSizer.Add(self.listCtrl, flag=wx.EXPAND, proportion=1)
 
@@ -63,7 +63,7 @@ class AllPackagesPanel(wx.Panel):
         self.checkbox_third_part_packages.SetValue(False)
         self.refresh_listctrl(SelectItem.get_all_packages_list())
 
-    def on_list_box_item_blick(self, event):
+    def on_list_box_item_click(self, event):
         print(event.GetIndex(), self.listCtrl_packages[event.GetIndex()])
         SelectItem.set_selected_package_name(self.listCtrl_packages[event.GetIndex()])
         print("选中了 ==> " + SelectItem.get_selected_package_name())
