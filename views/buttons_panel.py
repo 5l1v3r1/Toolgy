@@ -19,7 +19,7 @@ class ButtonsPanel(wx.Panel):
         super(ButtonsPanel, self).__init__(parent=parent, style=wx.BORDER_NONE)
         self.boxsizer_main = wx.BoxSizer(wx.VERTICAL)
 
-        # 设备操作
+        # device operation
         self.boxsizer_devices = wx.BoxSizer(wx.HORIZONTAL)
         self.devices_list = []
         self.combobox_devices = wx.ComboBox(self, choices=self.devices_list)
@@ -29,7 +29,7 @@ class ButtonsPanel(wx.Panel):
         self.Bind(wx.EVT_COMBOBOX, self.on_combobox_device_select, self.combobox_devices)
         self.Bind(wx.EVT_BUTTON, self.on_refresh_devices_list, self.button_refresh_devices)
 
-        # 启动四大组件
+        # component operation
         self.boxsizer_component = wx.BoxSizer(wx.HORIZONTAL)
         self.button_activity = wx.Button(self, label="Start Activity")
         self.button_service = wx.Button(self, label="Start Service")
@@ -41,7 +41,7 @@ class ButtonsPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.on_start_service, self.button_service)
         self.Bind(wx.EVT_BUTTON, self.on_send_broadcast, self.button_broadcast)
 
-        # 常规操作
+        # general operation
         self.boxsizer_operation = wx.BoxSizer(wx.HORIZONTAL)
         self.button_operation = wx.Button(self, label="Backup App")
         self.button_top_activity = wx.Button(self, label="Top Activity")
@@ -56,12 +56,12 @@ class ButtonsPanel(wx.Panel):
         self.boxsizer_main.Add(self.boxsizer_component)
         self.boxsizer_main.Add(self.boxsizer_operation)
 
-        # 命令参数提示窗口
+        # command param hint
         self.textctrl_hint = wx.TextCtrl(self, style=wx.TE_MULTILINE | wx.TE_READONLY)
         self.textctrl_hint.SetBackgroundColour(wx.WHITE)
         self.boxsizer_main.Add(self.textctrl_hint, flag=wx.EXPAND | wx.ALL, proportion=1, border=5)
 
-        # 命令行窗口
+        # command editor
         self.boxsizer_command = wx.BoxSizer(wx.HORIZONTAL)
         self.textctrl_shell = wx.TextCtrl(self, style=wx.TE_MULTILINE)
         self.shell_exec_button = wx.Button(self, label="Execute")
@@ -70,18 +70,18 @@ class ButtonsPanel(wx.Panel):
         self.boxsizer_main.Add(self.boxsizer_command, flag=wx.EXPAND | wx.ALL, proportion=1)
         self.Bind(wx.EVT_BUTTON, self.on_command_exec, self.shell_exec_button)
 
-        # 命令执行输出
+        # command execute output
         self.textctrl_output = wx.TextCtrl(self, style=wx.TE_MULTILINE)
         self.textctrl_output.SetBackgroundColour(wx.WHITE)
         self.boxsizer_main.Add(self.textctrl_output, flag=wx.EXPAND | wx.ALL, proportion=1, border=5)
 
-        # 状态栏，没作用，就是好看
+        # StatusBar, useless, just add for fun
         self.statusbar = wx.StatusBar(self)
         self.boxsizer_main.Add(self.statusbar)
 
         self.SetSizer(self.boxsizer_main)
 
-        # 应用启动时刷新设备列表
+        # refresh device list while starting Toolgy
         self.refresh_devices_list()
 
     def on_combobox_device_select(self, event):
@@ -107,7 +107,6 @@ class ButtonsPanel(wx.Panel):
         self.refresh_devices_list()
 
     def refresh_devices_list(self):
-        print("refresh_devices_list()")
         self.textctrl_hint.SetValue('')
         out, err = ShellTool.run("adb devices")
         devices = out.split('\n')
@@ -119,7 +118,6 @@ class ButtonsPanel(wx.Panel):
         if len(self.devices_list) > 0:
             self.combobox_devices.SetValue(self.devices_list[0])
             SelectItem.set_selected_device_name(self.devices_list[0])
-            print("选中了 ==> " + SelectItem.get_selected_device_name())
 
     def on_get_top_activity(self, event):
         self.textctrl_hint.SetValue('')
