@@ -18,10 +18,11 @@ class AllPackagesPanel(wx.Panel):
 
         # 过滤器
         self.filter_boxsizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.checkbox_all_packages = wx.CheckBox(self, label='所有应用')
-        self.checkbox_system_packages = wx.CheckBox(self, label='系统应用')
-        self.checkbox_third_part_packages = wx.CheckBox(self, label='第三方应用')
-        self.refresh_button = wx.Button(self, label='刷新应用列表')
+        self.checkbox_all_packages = wx.CheckBox(self, label='All App')
+        self.checkbox_system_packages = wx.CheckBox(self, label='System App')
+        self.checkbox_third_part_packages = wx.CheckBox(self, label='Third Part App')
+        self.refresh_button = wx.Button(self, label='Refresh App List')
+
         self.filter_boxsizer.Add(self.checkbox_all_packages, flag=wx.EXPAND | wx.ALL, border=10)
         self.filter_boxsizer.Add(self.checkbox_system_packages, flag=wx.EXPAND | wx.ALL, border=10)
         self.filter_boxsizer.Add(self.checkbox_third_part_packages, flag=wx.EXPAND | wx.ALL, border=10)
