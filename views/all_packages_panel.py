@@ -5,6 +5,7 @@ from pubsub import pub
 import wx
 
 from global_config.select_item import SelectItem
+from tools.device_tool import DeviceTool
 from tools.shell_tool import ShellTool
 
 
@@ -71,7 +72,7 @@ class AllPackagesPanel(wx.Panel):
         print(event.GetIndex(), self.listCtrl_packages[event.GetIndex()])
 
     def init_packages_list(self):
-        out, err = ShellTool.run("adb -s {} shell pm list packages -f".format(SelectItem.get_selected_device_name()))
+        out, err = DeviceTool.get_all_packages_with_filepath()
         packages = out.split('\n')
         SelectItem.set_all_packages_list(packages)
         temp_system_packages = []

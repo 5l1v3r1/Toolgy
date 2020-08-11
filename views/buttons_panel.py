@@ -6,6 +6,7 @@ from pubsub import pub
 
 from global_config.select_item import SelectItem
 from tools.component_tool import ComponentTool
+from tools.device_tool import DeviceTool
 from tools.shell_tool import ShellTool
 
 import sys
@@ -98,13 +99,10 @@ class ButtonsPanel(wx.Panel):
             return
         device_name = self.combobox_devices.GetItems()[select_index].encode('utf-8')
         SelectItem.set_selected_device_name(device_name)
-        device_os_version = ShellTool.run("adb -s {} shell getprop ro.product.name"
-                                          .format(SelectItem.get_selected_device_name()))
-        device_build_version = ShellTool.run("adb -s {} shell getprop ro.build.version.release"
-                                             .format(SelectItem.get_selected_device_name()))
-
-        self.statictext_device_name.SetLabel('Name: {}'.format(device_os_version[0]).strip())
-        self.statictext_device_os_version.SetLabel('OS Version: {}'.format(device_build_version[0]).strip())
+        device_name = DeviceTool.getprop_ro_product_name()
+        device_os_version = DeviceTool.getprop_ro_build_version_release()
+        self.statictext_device_name.SetLabel('Name: {}'.format(device_name[0]).strip())
+        self.statictext_device_os_version.SetLabel('OS Version: {}'.format(device_os_version[0]).strip())
 
         pub.sendMessage('re_select_device')
 
@@ -133,17 +131,14 @@ class ButtonsPanel(wx.Panel):
         if len(self.devices_list) > 0:
             self.combobox_devices.SetValue(self.devices_list[0])
             SelectItem.set_selected_device_name(self.devices_list[0])
-            device_os_version = ShellTool.run("adb -s {} shell getprop ro.product.name"
-                                              .format(SelectItem.get_selected_device_name()))
-            device_build_version = ShellTool.run("adb -s {} shell getprop ro.build.version.release"
-                                                 .format(SelectItem.get_selected_device_name()))
-            self.statictext_device_name.SetLabel('Name: {}'.format(device_os_version[0]).strip())
-            self.statictext_device_os_version.SetLabel('OS Version: {}'.format(device_build_version[0]).strip())
+            device_name = DeviceTool.getprop_ro_product_name()
+            device_os_version = DeviceTool.getprop_ro_build_version_release()
+            self.statictext_device_name.SetLabel('Name: {}'.format(device_name[0]).strip())
+            self.statictext_device_os_version.SetLabel('OS Version: {}'.format(device_os_version[0]).strip())
 
     def on_get_top_activity(self, event):
         self.textctrl_hint.SetValue('')
-        device_build_version = ShellTool.run("adb -s {} shell getprop ro.build.version.release"
-                                             .format(SelectItem.get_selected_device_name()))
+        device_build_version = DeviceTool.getprop_ro_build_version_release()
         shell = ''
         if device_build_version[0].startswith("7"):
             shell = 'adb -s {} shell dumpsys activity | grep "mFocusedActivity"' \
