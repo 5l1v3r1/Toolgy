@@ -19,6 +19,13 @@ class ButtonsPanel(wx.Panel):
         super(ButtonsPanel, self).__init__(parent=parent, style=wx.BORDER_NONE)
         self.boxsizer_main = wx.BoxSizer(wx.VERTICAL)
 
+        # device info
+        self.boxsizer_device_info = wx.BoxSizer(wx.HORIZONTAL)
+        self.statictext_device_name = wx.StaticText(self, label='Name:')
+        self.statictext_device_os_version = wx.StaticText(self, label='OS Version:')
+        self.boxsizer_device_info.Add(self.statictext_device_name, flag=wx.EXPAND | wx.ALL, border=10)
+        self.boxsizer_device_info.Add(self.statictext_device_os_version, flag=wx.EXPAND | wx.ALL, border=10)
+
         # device operation
         self.boxsizer_devices = wx.BoxSizer(wx.HORIZONTAL)
         self.devices_list = []
@@ -52,6 +59,7 @@ class ButtonsPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.on_get_top_activity, self.button_top_activity)
         self.Bind(wx.EVT_BUTTON, self.on_get_device_info, self.button_device_info)
 
+        self.boxsizer_main.Add(self.boxsizer_device_info)
         self.boxsizer_main.Add(self.boxsizer_devices)
         self.boxsizer_main.Add(self.boxsizer_component)
         self.boxsizer_main.Add(self.boxsizer_operation)
@@ -90,6 +98,13 @@ class ButtonsPanel(wx.Panel):
             return
         device_name = self.combobox_devices.GetItems()[select_index].encode('utf-8')
         SelectItem.set_selected_device_name(device_name)
+        device_os_version = ShellTool.run("adb -s {} shell getprop ro.product.name"
+                                          .format(SelectItem.get_selected_device_name()))
+        device_build_version = ShellTool.run("adb -s {} shell getprop ro.build.version.release"
+                                             .format(SelectItem.get_selected_device_name()))
+
+        self.statictext_device_name.SetLabel('Name: {}'.format(device_os_version[0]).strip())
+        self.statictext_device_os_version.SetLabel('OS Version: {}'.format(device_build_version[0]).strip())
 
         pub.sendMessage('re_select_device')
 
@@ -118,6 +133,12 @@ class ButtonsPanel(wx.Panel):
         if len(self.devices_list) > 0:
             self.combobox_devices.SetValue(self.devices_list[0])
             SelectItem.set_selected_device_name(self.devices_list[0])
+            device_os_version = ShellTool.run("adb -s {} shell getprop ro.product.name"
+                                              .format(SelectItem.get_selected_device_name()))
+            device_build_version = ShellTool.run("adb -s {} shell getprop ro.build.version.release"
+                                                 .format(SelectItem.get_selected_device_name()))
+            self.statictext_device_name.SetLabel('Name: {}'.format(device_os_version[0]).strip())
+            self.statictext_device_os_version.SetLabel('OS Version: {}'.format(device_build_version[0]).strip())
 
     def on_get_top_activity(self, event):
         self.textctrl_hint.SetValue('')
@@ -125,10 +146,10 @@ class ButtonsPanel(wx.Panel):
                                              .format(SelectItem.get_selected_device_name()))
         shell = ''
         if device_build_version[0].startswith("7"):
-            shell = 'adb -s {} shell dumpsys activity | grep "mFocusedActivity"'\
+            shell = 'adb -s {} shell dumpsys activity | grep "mFocusedActivity"' \
                 .format(SelectItem.get_selected_device_name())
         elif device_build_version[0].startswith("8"):
-            shell = 'adb -s {} shell dumpsys activity activities | grep "mResumedActivity"'\
+            shell = 'adb -s {} shell dumpsys activity activities | grep "mResumedActivity"' \
                 .format(SelectItem.get_selected_device_name())
         self.textctrl_shell.SetValue(shell)
         out, err = ShellTool.run(shell)
