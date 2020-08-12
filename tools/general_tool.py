@@ -9,7 +9,7 @@ class GeneralTool:
         pass
 
     @staticmethod
-    def get_top_activity(buttons_panel):
+    def get_top_activity(device_panel):
         device_build_version = DeviceTool.getprop_ro_build_version_release()
         shell = ''
         if device_build_version[0].startswith("7"):
@@ -18,8 +18,8 @@ class GeneralTool:
         elif device_build_version[0].startswith("8"):
             shell = 'adb -s {} shell dumpsys activity activities | grep "mResumedActivity"' \
                 .format(SelectItem.get_selected_device_name())
-        buttons_panel.textctrl_shell.SetValue(shell)
+        device_panel.textctrl_shell.SetValue(shell)
         out, err = ShellTool.run(shell)
-        buttons_panel.textctrl_output.SetValue(out)
-        buttons_panel.textctrl_output.AppendText('\n')
-        buttons_panel.textctrl_output.AppendText(err)
+        device_panel.textctrl_output.SetValue(out)
+        device_panel.textctrl_output.AppendText('\n')
+        device_panel.textctrl_output.AppendText(err)

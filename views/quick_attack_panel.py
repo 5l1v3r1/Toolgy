@@ -22,9 +22,9 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
-class ButtonsPanel(wx.Panel):
+class QuickAttackPanel(wx.Panel):
     def __init__(self, parent):
-        super(ButtonsPanel, self).__init__(parent=parent, style=wx.BORDER_NONE)
+        super(QuickAttackPanel, self).__init__(parent=parent, style=wx.BORDER_NONE)
         self.boxsizer_main = wx.BoxSizer(wx.VERTICAL)
 
         # device operation
@@ -52,63 +52,20 @@ class ButtonsPanel(wx.Panel):
         self.button_activity = wx.Button(self, label='Start Activity')
         self.button_service = wx.Button(self, label='Start Service')
         self.button_broadcast = wx.Button(self, label='Send Broadcast')
-        self.button_generate_intent_attack_poc = wx.Button(self, label='Intent DOS Poc')
         self.boxsizer_component.Add(self.button_activity, flag=wx.EXPAND | wx.ALL, border=0)
         self.boxsizer_component.AddSpacer(10)
         self.boxsizer_component.Add(self.button_service, flag=wx.EXPAND | wx.ALL, border=0)
         self.boxsizer_component.AddSpacer(10)
         self.boxsizer_component.Add(self.button_broadcast, flag=wx.EXPAND | wx.ALL, border=0)
         self.boxsizer_component.AddSpacer(10)
-        self.boxsizer_component.Add(self.button_generate_intent_attack_poc, flag=wx.EXPAND | wx.ALL, border=0)
         self.Bind(wx.EVT_BUTTON, self.on_start_activity, self.button_activity)
         self.Bind(wx.EVT_BUTTON, self.on_start_service, self.button_service)
         self.Bind(wx.EVT_BUTTON, self.on_send_broadcast, self.button_broadcast)
-        self.Bind(wx.EVT_BUTTON, self.on_generate_intent_dos_poc, self.button_generate_intent_attack_poc)
         self.staticboxsizer_component.Add(self.boxsizer_component)
-
-        # general operation
-        self.staticboxsizer_operation = wx.StaticBoxSizer(wx.StaticBox(self, label='General Operation'))
-        self.boxsizer_operation = wx.BoxSizer(wx.HORIZONTAL)
-        self.button_operation = wx.Button(self, label='Backup App')
-        self.button_top_activity = wx.Button(self, label='Top Activity')
-        self.button_device_info = wx.Button(self, label='Device Info')
-        self.button_insatall_app = wx.Button(self, label='Install App')
-        self.button_uninsatall_app = wx.Button(self, label='Uninstall App')
-        self.boxsizer_operation.Add(self.button_operation, flag=wx.EXPAND | wx.ALL, border=0)
-        self.boxsizer_operation.AddSpacer(10)
-        self.boxsizer_operation.Add(self.button_top_activity, flag=wx.EXPAND | wx.ALL, border=0)
-        self.boxsizer_operation.AddSpacer(10)
-        self.boxsizer_operation.Add(self.button_device_info, flag=wx.EXPAND | wx.ALL, border=0)
-        self.boxsizer_operation.AddSpacer(10)
-        self.boxsizer_operation.Add(self.button_insatall_app, flag=wx.EXPAND | wx.ALL, border=0)
-        self.boxsizer_operation.AddSpacer(10)
-        self.boxsizer_operation.Add(self.button_uninsatall_app, flag=wx.EXPAND | wx.ALL, border=0)
-        self.Bind(wx.EVT_BUTTON, self.on_get_top_activity, self.button_top_activity)
-        self.Bind(wx.EVT_BUTTON, self.on_get_device_info, self.button_device_info)
-        self.Bind(wx.EVT_BUTTON, self.on_install_app, self.button_insatall_app)
-        self.Bind(wx.EVT_BUTTON, self.on_uninstall_app, self.button_uninsatall_app)
-        self.staticboxsizer_operation.Add(self.boxsizer_operation)
-
-        # hook operation
-        self.staticboxsizer_hook = wx.StaticBoxSizer(wx.StaticBox(self, label='Frida & Xposed'))
-        self.boxsizer_hook = wx.BoxSizer(wx.HORIZONTAL)
-        self.button_generate_frida_basic_script = wx.Button(self, label='Frida Basic Script')
-        self.button_generate_frida_native_script = wx.Button(self, label='Frida Native Script')
-        self.button_generate_xposed_basic_code = wx.Button(self, label='Xposed Basic Code')
-        self.boxsizer_hook.Add(self.button_generate_frida_basic_script, flag=wx.EXPAND | wx.ALL, border=0)
-        self.boxsizer_hook.AddSpacer(10)
-        self.boxsizer_hook.Add(self.button_generate_frida_native_script, flag=wx.EXPAND | wx.ALL, border=0)
-        self.boxsizer_hook.AddSpacer(10)
-        self.boxsizer_hook.Add(self.button_generate_xposed_basic_code, flag=wx.EXPAND | wx.ALL, border=0)
-        self.staticboxsizer_hook.Add(self.boxsizer_hook)
-        self.Bind(wx.EVT_BUTTON, self.on_generate_frida_basic_script, self.button_generate_frida_basic_script)
-        self.Bind(wx.EVT_BUTTON, self.on_generate_xposed_basic_script, self.button_generate_xposed_basic_code)
 
         # Add all staticboxsizers to boxsizer_main
         self.boxsizer_main.Add(self.staticboxsizer_devices, flag=wx.EXPAND | wx.ALL, border=0)
         self.boxsizer_main.Add(self.staticboxsizer_component, flag=wx.EXPAND | wx.ALL, border=0)
-        self.boxsizer_main.Add(self.staticboxsizer_operation, flag=wx.EXPAND | wx.ALL, border=0)
-        self.boxsizer_main.Add(self.staticboxsizer_hook, flag=wx.EXPAND | wx.ALL, border=0)
 
         # command param hint
         self.textctrl_hint = wx.TextCtrl(self, style=wx.TE_MULTILINE | wx.TE_READONLY)
@@ -128,10 +85,6 @@ class ButtonsPanel(wx.Panel):
         self.textctrl_output = wx.TextCtrl(self, style=wx.TE_MULTILINE)
         self.textctrl_output.SetBackgroundColour(wx.WHITE)
         self.boxsizer_main.Add(self.textctrl_output, flag=wx.EXPAND | wx.ALL, proportion=1, border=5)
-
-        # StatusBar, useless, just add for fun
-        self.statusbar = wx.StatusBar(self)
-        self.boxsizer_main.Add(self.statusbar)
 
         self.SetSizer(self.boxsizer_main)
 
@@ -164,10 +117,6 @@ class ButtonsPanel(wx.Panel):
         self.clear_all_textctrl()
         ComponentTool.send_broadcast(self)
 
-    def on_generate_intent_dos_poc(self, event):
-        self.clear_all_textctrl()
-        ComponentTool.generate_intent_dos_poc(self)
-
     def on_refresh_devices_list(self, event):
         self.refresh_devices_list()
 
@@ -197,19 +146,6 @@ class ButtonsPanel(wx.Panel):
             SelectItem.clear_all()
             pub.sendMessage('no_device')
 
-    def on_get_top_activity(self, event):
-        self.clear_all_textctrl()
-        GeneralTool.get_top_activity(self)
-
-    def on_get_device_info(self, event):
-        self.clear_all_textctrl()
-        shell = 'adb -s {} shell getprop'.format(SelectItem.get_selected_device_name())
-        self.textctrl_shell.SetValue(shell)
-        out, err = ShellTool.run(shell)
-        self.textctrl_output.SetValue(out)
-        self.textctrl_output.AppendText('\n')
-        self.textctrl_output.AppendText(err)
-
     def on_command_exec(self, event):
         shell = self.textctrl_shell.GetValue()
         out, err = ShellTool.run(shell)
@@ -217,23 +153,7 @@ class ButtonsPanel(wx.Panel):
         self.textctrl_output.AppendText('\n')
         self.textctrl_output.AppendText(err)
 
-    def on_generate_frida_basic_script(self, event):
-        self.clear_all_textctrl()
-        FridaTool.generate_frida_basic_script(self)
-
-    def on_generate_xposed_basic_script(self, event):
-        self.clear_all_textctrl()
-        XposedTool.generate_xposed_basic_code(self)
-
     def clear_all_textctrl(self):
         self.textctrl_hint.SetValue('')
         self.textctrl_shell.SetValue('')
         self.textctrl_output.SetValue('')
-
-    def on_install_app(self, event):
-        self.clear_all_textctrl()
-        PackageManagerTool.install_app(self)
-
-    def on_uninstall_app(self, event):
-        self.clear_all_textctrl()
-        PackageManagerTool.uninstall_app(self)

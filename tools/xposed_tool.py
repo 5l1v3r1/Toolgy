@@ -5,8 +5,9 @@ class XposedTool:
         pass
 
     @staticmethod
-    def generate_xposed_basic_code(buttons_panel):
-        buttons_panel.textctrl_shell.SetValue('''public class Potat0Monitor implements IXposedHookLoadPackage {
+    def generate_xposed_basic_code(xposed_panel):
+        xposed_panel.textctrl_code.SetValue(
+            '''public class Potat0Monitor implements IXposedHookLoadPackage {
     private static String TAG = "wnagzihxa1n";
 
     @Override
@@ -31,5 +32,4 @@ class XposedTool:
             }
         }
     }
-}
-        ''')
+}''')

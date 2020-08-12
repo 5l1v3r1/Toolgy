@@ -5,8 +5,8 @@ class FridaTool:
         pass
 
     @staticmethod
-    def generate_frida_basic_script(buttons_panel):
-        buttons_panel.textctrl_shell.SetValue('''import frida, sys
+    def generate_frida_basic_script(frida_panel):
+        frida_panel.textctrl_code.SetValue('''import frida, sys
 
 package_name = ''
 
@@ -30,5 +30,4 @@ process = frida.get_usb_device().attach(package_name)
 script = process.create_script(jscode)
 script.on('message', on_message)
 script.load()
-sys.stdin.read()
-        ''')
+sys.stdin.read()''')
