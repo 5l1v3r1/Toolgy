@@ -86,6 +86,7 @@ class ButtonsPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.on_get_top_activity, self.button_top_activity)
         self.Bind(wx.EVT_BUTTON, self.on_get_device_info, self.button_device_info)
         self.Bind(wx.EVT_BUTTON, self.on_install_app, self.button_insatall_app)
+        self.Bind(wx.EVT_BUTTON, self.on_uninstall_app, self.button_uninsatall_app)
         self.staticboxsizer_operation.Add(self.boxsizer_operation)
 
         # hook operation
@@ -201,7 +202,7 @@ class ButtonsPanel(wx.Panel):
         GeneralTool.get_top_activity(self)
 
     def on_get_device_info(self, event):
-        self.textctrl_hint.SetValue('')
+        self.clear_all_textctrl()
         shell = 'adb -s {} shell getprop'.format(SelectItem.get_selected_device_name())
         self.textctrl_shell.SetValue(shell)
         out, err = ShellTool.run(shell)
@@ -235,4 +236,4 @@ class ButtonsPanel(wx.Panel):
 
     def on_uninstall_app(self, event):
         self.clear_all_textctrl()
-        pass
+        PackageManagerTool.uninstall_app(self)

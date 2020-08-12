@@ -3,6 +3,8 @@ import os
 
 import wx
 
+from global_config.select_item import SelectItem
+
 
 class PackageManagerTool:
     def __init__(self):
@@ -23,5 +25,8 @@ class PackageManagerTool:
             buttons_panel.textctrl_shell.SetValue('adb install {}'.format(file_path.replace(' ', '\ ')))
 
     @staticmethod
-    def uninstall_app(buttons_panel, package_name):
-        pass
+    def uninstall_app(buttons_panel):
+        device_name = SelectItem.get_selected_device_name()
+        uninstall_app_package = SelectItem.get_selected_package_name()
+        shell = 'adb -s {} uninstall {}'.format(device_name, uninstall_app_package)
+        buttons_panel.textctrl_shell.SetValue(shell)
