@@ -2,8 +2,6 @@
 import wx
 
 from tools.frida_tool import FridaTool
-from tools.shell_tool import ShellTool
-from tools.xposed_tool import XposedTool
 
 
 class FridaPanel(wx.Panel):

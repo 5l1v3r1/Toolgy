@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 import os
+import xml.etree.ElementTree as ET
 
 import wx
 from pubsub import pub
@@ -30,7 +31,7 @@ class QuickAttackPanel(wx.Panel):
         # device operation
         self.staticboxsizer_devices = wx.StaticBoxSizer(wx.StaticBox(self, label='Device Operation'))
         self.boxsizer_devices = wx.BoxSizer(wx.HORIZONTAL)
-        self.statictext_device_name = wx.StaticText(self, -1, label='Name:ç')
+        self.statictext_device_name = wx.StaticText(self, -1, label='Name:          ')
         self.statictext_device_os_version = wx.StaticText(self, -1, label='OS Version:          ')
         self.boxsizer_devices.Add(self.statictext_device_name, flag=wx.CENTER | wx.ALL, border=0)
         self.boxsizer_devices.AddSpacer(10)
@@ -38,6 +39,7 @@ class QuickAttackPanel(wx.Panel):
         self.boxsizer_devices.AddSpacer(10)
         self.devices_list = []
         self.combobox_devices = wx.ComboBox(self, choices=self.devices_list)
+        # self.combobox_devices.SetBackgroundColour(wx.WHITE)
         self.button_refresh_devices = wx.Button(self, label='Refresh Device List')
         self.boxsizer_devices.Add(self.combobox_devices, flag=wx.EXPAND | wx.ALL, border=0)
         self.boxsizer_devices.AddSpacer(10)
@@ -47,7 +49,7 @@ class QuickAttackPanel(wx.Panel):
         self.staticboxsizer_devices.Add(self.boxsizer_devices)
 
         # component operation
-        self.staticboxsizer_component = wx.StaticBoxSizer(wx.StaticBox(self, label='Component Operation'))
+        self.staticboxsizer_component = wx.StaticBoxSizer(wx.StaticBox(self, label='Quick Attack'))
         self.boxsizer_component = wx.BoxSizer(wx.HORIZONTAL)
         self.button_activity = wx.Button(self, label='Start Activity')
         self.button_service = wx.Button(self, label='Start Service')
@@ -88,8 +90,15 @@ class QuickAttackPanel(wx.Panel):
 
         self.SetSizer(self.boxsizer_main)
 
+        tree = ET.parse("./config.xml")
+        adb_path = tree.getroot()[0].text.strip()
+        SelectItem.set_adb_path(adb_path)
+
+        ShellTool.init_shell_env()
+
         # refresh device list while starting Toolgy
         self.refresh_devices_list()
+        # self.textctrl_hint.SetValue(str(ShellTool.env))
 
     def on_combobox_device_select(self, event):
         self.clear_all_textctrl()

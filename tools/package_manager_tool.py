@@ -15,18 +15,18 @@ class PackageManagerTool:
         pass
 
     @staticmethod
-    def install_app(buttons_panel):
+    def install_app(device_panel):
         dir_name = ''
-        dialog = wx.FileDialog(buttons_panel, 'Choose a apk file', dir_name, "", "*.*", wx.FD_OPEN)
+        dialog = wx.FileDialog(device_panel, 'Choose a apk file', dir_name, "", "*.*", wx.FD_OPEN)
         if dialog.ShowModal() == wx.ID_OK:
             file_name = dialog.GetFilename()
             dir_name = dialog.GetDirectory()
             file_path = os.path.join(dir_name, file_name)
-            buttons_panel.textctrl_shell.SetValue('adb install {}'.format(file_path.replace(' ', '\ ')))
+            device_panel.textctrl_shell.SetValue('adb install {}'.format(file_path.replace(' ', '\ ')))
 
     @staticmethod
-    def uninstall_app(buttons_panel):
+    def uninstall_app(device_panel):
         device_name = SelectItem.get_selected_device_name()
         uninstall_app_package = SelectItem.get_selected_package_name()
         shell = 'adb -s {} uninstall {}'.format(device_name, uninstall_app_package)
-        buttons_panel.textctrl_shell.SetValue(shell)
+        device_panel.textctrl_shell.SetValue(shell)

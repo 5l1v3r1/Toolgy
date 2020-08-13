@@ -9,6 +9,7 @@ class SelectItem:
     list_all_packages = []
     list_system_packages = []
     list_third_part_packages = []
+    adb_path = ''
 
     @staticmethod
     def clear_all():
@@ -58,4 +59,10 @@ class SelectItem:
     def set_third_part_packages_list(third_part_packages):
         SelectItem.list_third_part_packages = third_part_packages
 
+    @staticmethod
+    def get_adb_path():
+        return SelectItem.adb_path
 
+    @staticmethod
+    def set_adb_path(adb_path):
+        SelectItem.adb_path = adb_path
