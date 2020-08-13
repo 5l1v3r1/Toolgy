@@ -62,6 +62,8 @@ class AllPackagesPanel(wx.Panel):
 
     def re_select_device(self):
         self.init_packages_list()
+        self.checkbox_all_packages.SetValue(False)
+        self.checkbox_system_packages.SetValue(False)
         self.checkbox_third_part_packages.SetValue(True)
         self.refresh_listctrl(SelectItem.get_third_part_packages_list())
 
