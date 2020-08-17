@@ -38,7 +38,7 @@ class AllPackagesPanel(wx.Panel):
         self.listCtrl = wx.ListCtrl(self, -1, style=wx.LC_REPORT)
         self.listCtrl.SetBackgroundColour('#90EE90')
         self.listCtrl.InsertColumn(0, 'Num', wx.LIST_FORMAT_CENTER, width=50)
-        self.listCtrl.InsertColumn(1, 'Package Name', wx.LIST_FORMAT_LEFT, width=300)
+        self.listCtrl.InsertColumn(1, 'Package Name', wx.LIST_FORMAT_LEFT, width=250)
         self.listCtrl.InsertColumn(2, 'APK Path', wx.LIST_FORMAT_LEFT, width=500)
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.on_list_box_item_click, self.listCtrl)
         self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.on_list_box_item_double_click, self.listCtrl)
@@ -98,6 +98,7 @@ class AllPackagesPanel(wx.Panel):
 
     def refresh_listctrl(self, packages):
         self.listCtrl.DeleteAllItems()
+        self.listCtrl_packages = []
 
         i = 0
         for package in packages:

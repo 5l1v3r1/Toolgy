@@ -18,6 +18,12 @@ class GeneralTool:
         elif device_build_version[0].startswith("8"):
             shell = 'adb -s {} shell dumpsys activity activities | grep "mResumedActivity"' \
                 .format(SelectItem.get_selected_device_name())
+        elif device_build_version[0].startswith("9"):
+            shell = 'adb -s {} shell dumpsys activity activities | grep "mResumedActivity"' \
+                .format(SelectItem.get_selected_device_name())
+        elif device_build_version[0].startswith("10"):
+            shell = 'adb -s {} shell dumpsys activity activities | grep "mResumedActivity"' \
+                .format(SelectItem.get_selected_device_name())
         device_panel.textctrl_shell.SetValue(shell)
         out, err = ShellTool.run(shell)
         device_panel.textctrl_output.SetValue(out)
