@@ -17,7 +17,7 @@ class PackageManagerTool:
     @staticmethod
     def install_app(device_panel):
         dir_name = ''
-        dialog = wx.FileDialog(device_panel, 'Choose a apk file', dir_name, "", "*.*", wx.FD_OPEN)
+        dialog = wx.FileDialog(device_panel, 'Choose a apk file', dir_name, "", "*.apk", wx.FD_OPEN)
         if dialog.ShowModal() == wx.ID_OK:
             file_name = dialog.GetFilename()
             dir_name = dialog.GetDirectory()
